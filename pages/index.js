@@ -1,18 +1,19 @@
-import axios from 'axios';
 import { Card, Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
-import { MessageOutlined, PhoneOutlined } from '@ant-design/icons';
-
+import { MailOutlined, PhoneOutlined, GlobalOutlined, HeartOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { getUsers, updateUser } from './api/hello';
+import { Form, Modal } from 'antd';
 
 
 export default function Home() {
+  
   
     const [users, setUsers] = useState([]);
   
     useEffect(() => {
       const fetchUsers = async () => {
-        const res = await axios.get('https://jsonplaceholder.typicode.com/users');
-        setUsers(res.data);
+        const users = await getUsers();
+        setUsers(users);
       };
       fetchUsers();
     }, []);
@@ -20,17 +21,18 @@ export default function Home() {
   
   return (
     <div className='usersCard'>
-    <Row gutter={[40,40]}>
+    <Row gutter={[20,20]}>
     {users.map(user => (
-      <Col md={6} xs={24} sm={8} key={user.id}>
-        <Card>
+      <Col lg={6} md={8} xs={24} sm={12} key={user.id}>
+        <Card actions={[
+          <HeartOutlined key="love" />,
+          <EditOutlined key="edit" />,
+          <DeleteOutlined key="delete" />,
+        ]}>
         <h3>{user.name}</h3>
-        <MessageOutlined style={{ fontSize: '16px', color: '#08c' }} />
-         {user.email}
-          <br />
-          <PhoneOutlined style={{ fontSize: '16px', color: '#08c' }} /> {user.phone}
-          <br/>
-          <PhoneOutlined style={{ fontSize: '16px', color: '#08c' }} /> {user.website}
+          <p><MailOutlined style={{ fontSize: '16px'}} />{user.email}</p>
+          <p><PhoneOutlined style={{ fontSize: '16px'}} /> {user.phone}</p>
+          <p><GlobalOutlined style={{ fontSize: '16px'}} /> {user.website}</p>
         </Card>
       </Col>
     ))}
